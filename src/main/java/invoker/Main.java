@@ -1,23 +1,18 @@
 package invoker;
 
 import entity.Car;
+import entity.RefuellingStation;
 import loader.RefuellingParametersLoader;
-import task.RefuelTask;
 
 public class Main {
     static void main() {
         RefuellingParametersLoader parametersLoader = new RefuellingParametersLoader();
+        RefuellingStation refuellingStation = parametersLoader.loadParameters();
 
-        Car firstCar = new Car(0, 20);
-        Car secondCar = new Car(1, 35);
+        Car firstCar = new Car(0, 50, 20, refuellingStation);
+        Car secondCar = new Car(1, 60, 35, refuellingStation);
 
-        RefuelTask firstRefuelTask = new RefuelTask(firstCar);
-        RefuelTask secondRefuelTask = new RefuelTask(secondCar);
-
-        Thread firstThread = new Thread(firstRefuelTask);
-        Thread secondThread = new Thread(secondRefuelTask);
-
-        firstThread.start();
-        secondThread.start();
+        firstCar.start();
+        secondCar.start();
     }
 }

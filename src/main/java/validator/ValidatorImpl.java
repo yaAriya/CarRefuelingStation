@@ -5,11 +5,16 @@ import entity.Car;
 public class ValidatorImpl implements Validator {
     @Override
     public boolean validateCar(Car car) {
-        return validateId(car.getId()) && validateTankFreeSpace(car.getTankFreeSpace());
+        return validateId(car.threadId()) && validateTankVolume(car.getTankVolume())
+                && validateTankFreeSpace(car.getTankFreeSpace());
     }
 
-    public boolean validateId(int id) {
+    public boolean validateId(long id) {
         return id > 0;
+    }
+
+    public boolean validateTankVolume(int tankVolume){
+        return tankVolume > 0;
     }
 
     public boolean validateTankFreeSpace(int tankFreeSpace) {

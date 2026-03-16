@@ -1,8 +1,8 @@
 package loader;
 
+import entity.RefuellingStation;
 import exception.InvalidParametersException;
 import exception.LoaderException;
-import task.RefuelTask;
 import validator.Validator;
 import validator.ValidatorImpl;
 
@@ -14,18 +14,14 @@ import java.util.Properties;
 public class RefuellingParametersLoader {
     private static final String FILE_PATH = "src/main/resources/refuelingParameters.properties";
     private final Validator validator = new ValidatorImpl();
-    private int fuelPumpsCount;
+    private int pumpsCount;
     private int maxWaitTime;
 
     private int carsCount;
     private int minTankValue;
     private int maxTankValue;
 
-    public RefuellingParametersLoader() throws LoaderException {
-        loadParameters();
-    }
-
-    public void loadParameters() throws LoaderException {
+    public RefuellingStation loadParameters() throws LoaderException {
         try {
             Properties properties = new Properties();
             InputStream inputStream = new FileInputStream(FILE_PATH);
@@ -33,7 +29,7 @@ public class RefuellingParametersLoader {
             inputStream.close();
 
             String stringFuelPumpsCount = properties.getProperty("fuelPumpsCount");
-            fuelPumpsCount = Integer.parseInt(stringFuelPumpsCount);
+            pumpsCount = Integer.parseInt(stringFuelPumpsCount);
 
             String stringMaxWaitTime = properties.getProperty("maxWaitTime");
             maxWaitTime = Integer.parseInt(stringMaxWaitTime);
@@ -47,9 +43,10 @@ public class RefuellingParametersLoader {
             String stringMaxTankValue = properties.getProperty("maxTankValue");
             maxTankValue = Integer.parseInt(stringMaxTankValue);
 
-            boolean parametersIsValid = validator.validateRefuelingParameters(fuelPumpsCount, maxWaitTime, carsCount, minTankValue, maxTankValue);
-            if(parametersIsValid){
-                RefuelTask refuelTask = new RefuelTask(fuelPumpsCount, maxWaitTime, carsCount, minTankValue, maxTankValue);
+            boolean parametersIsValid = validator.validateRefuelingParameters(pumpsCount, maxWaitTime, carsCount, minTankValue, maxTankValue);
+            if (parametersIsValid) {
+                RefuellingStation refuellingStation = new RefuellingStation(pumpsCount, maxWaitTime, carsCount, minTankValue, maxTankValue);
+                return refuellingStation;
             } else {
                 throw new InvalidParametersException("Your parameters are invalid");
             }
@@ -62,8 +59,8 @@ public class RefuellingParametersLoader {
         return carsCount;
     }
 
-    public int getFuelPumpsCount() {
-        return fuelPumpsCount;
+    public int getPumpsCount() {
+        return pumpsCount;
     }
 
     public int getMaxWaitTime() {
