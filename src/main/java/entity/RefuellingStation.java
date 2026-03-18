@@ -2,12 +2,15 @@ package entity;
 
 import exception.InvalidParametersException;
 import exception.RefuellingException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import validator.Validator;
 import validator.ValidatorImpl;
 
 import java.util.concurrent.locks.ReentrantLock;
 
 public class RefuellingStation {
+    private static final Logger LOGGER = LogManager.getLogger(RefuellingStation.class);
     private final ReentrantLock[] pumps;
     private final int pumpsCount;
     private final int maxWaitTime;
@@ -26,8 +29,7 @@ public class RefuellingStation {
         this.minTankFreeSpace = minTankFreeSpace;
         this.maxTankFreeSpace = maxTankFreeSpace;
 
-
-        System.out.println("Parameters are set");
+        LOGGER.info("Parameters are set");
     }
 
     public boolean tryRefuel(Car car) throws RefuellingException {
@@ -40,7 +42,7 @@ public class RefuellingStation {
                     for (ReentrantLock pump : pumps) {
                         if (pump.tryLock()) {
                             try {
-                                System.out.println(car.getId() + " Занял колонку " + pump);
+                                LOGGER.info("The {} car is refueling at {} pump", car.getId(), pump);
                                 Thread.sleep((long) car.getTankFreeSpace() * 10);
                                 return true;
                             } finally {
@@ -52,9 +54,11 @@ public class RefuellingStation {
                 }
                 return false;
             } else {
+                LOGGER.error("Invalid parameters");
                 throw new InvalidParametersException();
             }
         } catch (InvalidParametersException | InterruptedException e) {
+            LOGGER.error("Refueling problems");
             throw new RefuellingException(e);
         }
     }

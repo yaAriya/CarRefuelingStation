@@ -1,8 +1,11 @@
 package entity;
 
 import exception.RefuellingException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Car extends Thread {
+    private static final Logger LOGGER = LogManager.getLogger(Car.class);
     private final long id;
     private final int tankFreeSpace;
     private final RefuellingStation refuellingStation;
@@ -18,17 +21,17 @@ public class Car extends Thread {
         try {
             boolean success = refuellingStation.tryRefuel(this);
             if (success) {
-                System.out.println("Машина " + getId() + " Заправлена");
+                LOGGER.info("The car {} is refueled", id);
             } else {
-                System.out.println("Машина " + getId() + " уехала не заправившись");
+                LOGGER.info("The car {} left without refueling", id);
             }
-        } catch (RefuellingException e){
+        } catch (RefuellingException e) {
             throw new RuntimeException();
         }
     }
 
     @Override
-    public long getId(){
+    public long getId() {
         return id;
     }
 
