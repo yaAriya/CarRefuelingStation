@@ -5,7 +5,6 @@ import exception.RefuellingException;
 import validator.Validator;
 import validator.ValidatorImpl;
 
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class RefuellingStation {
@@ -13,10 +12,10 @@ public class RefuellingStation {
     private final int pumpsCount;
     private final int maxWaitTime;
     private final int carsCount;
-    private final int minTankValue;
-    private final int maxTankValue;
+    private final int minTankFreeSpace;
+    private final int maxTankFreeSpace;
 
-    public RefuellingStation(int pumpsCount, int maxWaitTime, int carsCount, int minTankValue, int maxTankValue) {
+    public RefuellingStation(int pumpsCount, int maxWaitTime, int carsCount, int minTankFreeSpace, int maxTankFreeSpace) {
         this.pumpsCount = pumpsCount;
         this.maxWaitTime = maxWaitTime;
         this.pumps = new ReentrantLock[pumpsCount];
@@ -24,35 +23,41 @@ public class RefuellingStation {
             pumps[i] = new ReentrantLock();
         }
         this.carsCount = carsCount;
-        this.minTankValue = minTankValue;
-        this.maxTankValue = maxTankValue;
+        this.minTankFreeSpace = minTankFreeSpace;
+        this.maxTankFreeSpace = maxTankFreeSpace;
+
+
         System.out.println("Parameters are set");
     }
 
-
-    public boolean tryRefuel(Car car) throws RefuellingException{
+    public boolean tryRefuel(Car car) throws RefuellingException {
         Validator validator = new ValidatorImpl();
         try {
-            if (validator.validateCar(car)) {
-                for (ReentrantLock pump : pumps) {
-                    try {
-                        if (pump.tryLock(maxWaitTime, TimeUnit.MILLISECONDS)) {
-                            Thread.sleep((long) car.getTankFreeSpace() * 10);
-                            System.out.println(car.threadId() + " Занял колонку");
+            if (validator.validateCar(car, minTankFreeSpace, maxTankFreeSpace)) {
+                long arrivalTime = System.currentTimeMillis();
+
+                while (System.currentTimeMillis() - arrivalTime < maxWaitTime) {
+                    for (ReentrantLock pump : pumps) {
+                        if (pump.tryLock()) {
+                            try {
+                                System.out.println(car.getId() + " Занял колонку " + pump);
+                                Thread.sleep((long) car.getTankFreeSpace() * 10);
+                                return true;
+                            } finally {
+                                pump.unlock();
+                            }
                         }
-                    } finally {
-                        pump.unlock();
                     }
+                    Thread.sleep(50);
                 }
                 return false;
             } else {
                 throw new InvalidParametersException();
             }
-        } catch (InvalidParametersException | InterruptedException e){
+        } catch (InvalidParametersException | InterruptedException e) {
             throw new RefuellingException(e);
         }
     }
-
 
     public ReentrantLock[] getPumps() {
         return pumps;
@@ -68,13 +73,5 @@ public class RefuellingStation {
 
     public int getCarsCount() {
         return carsCount;
-    }
-
-    public int getMinTankValue() {
-        return minTankValue;
-    }
-
-    public int getMaxTankValue() {
-        return maxTankValue;
     }
 }

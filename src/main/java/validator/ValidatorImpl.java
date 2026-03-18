@@ -4,28 +4,23 @@ import entity.Car;
 
 public class ValidatorImpl implements Validator {
     @Override
-    public boolean validateCar(Car car) {
-        return validateId(car.threadId()) && validateTankVolume(car.getTankVolume())
-                && validateTankFreeSpace(car.getTankFreeSpace());
+    public boolean validateCar(Car car, int minTankFreeSpace, int maxTankFreeSpace) {
+        return validateId(car.getId()) && validateTankFreeSpace(car.getTankFreeSpace(), minTankFreeSpace, maxTankFreeSpace);
     }
 
     public boolean validateId(long id) {
         return id > 0;
     }
 
-    public boolean validateTankVolume(int tankVolume){
-        return tankVolume > 0;
-    }
-
-    public boolean validateTankFreeSpace(int tankFreeSpace) {
-        return tankFreeSpace > 10 && tankFreeSpace < 50;
+    public boolean validateTankFreeSpace(int tankFreeSpace, int minTankFreeSpace, int maxTankFreeSpace) {
+        return tankFreeSpace > minTankFreeSpace && tankFreeSpace <= maxTankFreeSpace;
     }
 
     @Override
-    public boolean validateRefuelingParameters(int pumpsCount, int maxWaitTime, int carsCount, int minTankValue, int maxTankValue){
+    public boolean validateRefuelingParameters(int pumpsCount, int maxWaitTime, int carsCount, int minTankFreeSpace, int maxTankFreeSpace) {
         return validatePumpsCount(pumpsCount) && validateMaxWaitTime(maxWaitTime)
-                && validateCarsCount(carsCount) && validateMinTankValue(minTankValue)
-                && validateMaxTankValue(maxTankValue);
+                && validateCarsCount(carsCount) && validateMinTankFreeSpace(minTankFreeSpace)
+                && validateMaxTankFreeSpace(maxTankFreeSpace);
     }
 
     public boolean validatePumpsCount(int pumpsCount) {
@@ -40,12 +35,11 @@ public class ValidatorImpl implements Validator {
         return carsCount > 0;
     }
 
-
-    public boolean validateMinTankValue(int minTankValue) {
-        return minTankValue >= 0;
+    public boolean validateMinTankFreeSpace(int minTankFreeSpace) {
+        return minTankFreeSpace >= 0;
     }
 
-    public boolean validateMaxTankValue(int maxTankValue) {
-        return maxTankValue > 0;
+    public boolean validateMaxTankFreeSpace(int maxTankFreeSpace) {
+        return maxTankFreeSpace > 0;
     }
 }

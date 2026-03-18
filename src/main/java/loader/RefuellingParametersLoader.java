@@ -18,8 +18,8 @@ public class RefuellingParametersLoader {
     private int maxWaitTime;
 
     private int carsCount;
-    private int minTankValue;
-    private int maxTankValue;
+    private int minTankFreeSpace;
+    private int maxTankFreeSpace;
 
     public RefuellingStation loadParameters() throws LoaderException {
         try {
@@ -37,15 +37,15 @@ public class RefuellingParametersLoader {
             String StringCarsCount = properties.getProperty("carsCount");
             carsCount = Integer.parseInt(StringCarsCount);
 
-            String stringMinTankValue = properties.getProperty("minTankValue");
-            minTankValue = Integer.parseInt(stringMinTankValue);
+            String stringMinTankFreeSpace = properties.getProperty("minTankFreeSpace");
+            minTankFreeSpace = Integer.parseInt(stringMinTankFreeSpace);
 
-            String stringMaxTankValue = properties.getProperty("maxTankValue");
-            maxTankValue = Integer.parseInt(stringMaxTankValue);
+            String stringMaxTankFreeSpace  = properties.getProperty("maxTankFreeSpace");
+            maxTankFreeSpace = Integer.parseInt(stringMaxTankFreeSpace);
 
-            boolean parametersIsValid = validator.validateRefuelingParameters(pumpsCount, maxWaitTime, carsCount, minTankValue, maxTankValue);
+            boolean parametersIsValid = validator.validateRefuelingParameters(pumpsCount, maxWaitTime, carsCount, minTankFreeSpace, maxTankFreeSpace);
             if (parametersIsValid) {
-                RefuellingStation refuellingStation = new RefuellingStation(pumpsCount, maxWaitTime, carsCount, minTankValue, maxTankValue);
+                RefuellingStation refuellingStation = new RefuellingStation(pumpsCount, maxWaitTime, carsCount, minTankFreeSpace, maxTankFreeSpace);
                 return refuellingStation;
             } else {
                 throw new InvalidParametersException("Your parameters are invalid");
@@ -67,11 +67,11 @@ public class RefuellingParametersLoader {
         return maxWaitTime;
     }
 
-    public int getMinTankValue() {
-        return minTankValue;
+    public int getMinTankFreeSpace() {
+        return minTankFreeSpace;
     }
 
-    public int getMaxTankValue() {
-        return maxTankValue;
+    public int getMaxTankFreeSpace() {
+        return maxTankFreeSpace;
     }
 }

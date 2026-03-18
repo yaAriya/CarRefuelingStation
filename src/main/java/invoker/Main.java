@@ -9,10 +9,14 @@ public class Main {
         RefuellingParametersLoader parametersLoader = new RefuellingParametersLoader();
         RefuellingStation refuellingStation = parametersLoader.loadParameters();
 
-        Car firstCar = new Car(0, 50, 20, refuellingStation);
-        Car secondCar = new Car(1, 60, 35, refuellingStation);
+        Car firstCar = new Car(1, 50, refuellingStation);
+        Car secondCar = new Car(2, 40, refuellingStation);
+        Car thirdCar = new Car(3, 30, refuellingStation);
+        Car fourthCar = new Car(4, 45, refuellingStation);
 
         firstCar.start();
         secondCar.start();
+        thirdCar.start();
+        fourthCar.start();
     }
 }

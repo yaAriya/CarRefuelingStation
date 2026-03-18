@@ -3,14 +3,12 @@ package entity;
 import exception.RefuellingException;
 
 public class Car extends Thread {
-    private final int id;
-    private final int tankVolume;
+    private final long id;
     private final int tankFreeSpace;
     private final RefuellingStation refuellingStation;
 
-    public Car(int id, int tankValue, int tankFreeSpace, RefuellingStation refuellingStation) {
+    public Car(long id, int tankFreeSpace, RefuellingStation refuellingStation) {
         this.id = id;
-        this.tankVolume = tankValue;
         this.tankFreeSpace = tankFreeSpace;
         this.refuellingStation = refuellingStation;
     }
@@ -20,17 +18,18 @@ public class Car extends Thread {
         try {
             boolean success = refuellingStation.tryRefuel(this);
             if (success) {
-                System.out.println("Машина " + threadId() + " Заправлена");
+                System.out.println("Машина " + getId() + " Заправлена");
             } else {
-                System.out.println("Машина " + threadId() + " уехала не заправившись");
+                System.out.println("Машина " + getId() + " уехала не заправившись");
             }
         } catch (RefuellingException e){
             throw new RuntimeException();
         }
     }
 
-    public int getTankVolume() {
-        return tankVolume;
+    @Override
+    public long getId(){
+        return id;
     }
 
     public int getTankFreeSpace() {
