@@ -1,10 +1,11 @@
-2026-03-18 21:21:14,455 INFO invoker.Main - Process run
-2026-03-18 21:21:14,465 INFO entity.RefuellingStation - Parameters are set
-2026-03-18 21:21:14,467 INFO invoker.Main - Process end
-2026-03-18 21:21:14,478 INFO entity.RefuellingStation - The 1 car is refueling at java.util.concurrent.locks.ReentrantLock@ad98241[Locked by thread Thread-0] pump
-2026-03-18 21:21:14,980 INFO entity.Car - The car 1 is refueled
-2026-03-18 21:21:15,028 INFO entity.RefuellingStation - The 3 car is refueling at java.util.concurrent.locks.ReentrantLock@ad98241[Locked by thread Thread-2] pump
-2026-03-18 21:21:15,328 INFO entity.Car - The car 3 is refueled
-2026-03-18 21:21:15,331 INFO entity.RefuellingStation - The 4 car is refueling at java.util.concurrent.locks.ReentrantLock@ad98241[Locked by thread Thread-3] pump
-2026-03-18 21:21:15,483 INFO entity.Car - The car 2 left without refueling
-2026-03-18 21:21:15,783 INFO entity.Car - The car 4 is refueled
+2026-03-19 20:21:12,337 INFO invoker.Main - Process run
+2026-03-19 20:21:12,343 INFO loader.RefuellingParametersLoader - Validation was successful
+2026-03-19 20:21:12,345 INFO entity.RefuellingStation - Parameters are set
+2026-03-19 20:21:12,357 INFO entity.RefuellingStation - The 1 car is refueling at java.util.concurrent.locks.ReentrantLock@304bc225[Locked by thread Thread-0] pump
+2026-03-19 20:21:12,859 INFO entity.Car - The car 1 is refueled
+2026-03-19 20:21:12,905 INFO entity.RefuellingStation - The 4 car is refueling at java.util.concurrent.locks.ReentrantLock@304bc225[Locked by thread Thread-3] pump
+2026-03-19 20:21:13,356 INFO entity.Car - The car 4 is refueled
+2026-03-19 20:21:13,361 INFO entity.Car - The car 3 left without refueling
+2026-03-19 20:21:13,361 INFO entity.Car - The car 2 left without refueling
+2026-03-19 20:21:13,362 INFO invoker.Main - 2 out of 3 cars left without refueling
+2026-03-19 20:21:13,363 INFO invoker.Main - Process end

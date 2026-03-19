@@ -7,10 +7,12 @@ import org.apache.logging.log4j.Logger;
 import validator.Validator;
 import validator.ValidatorImpl;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class RefuellingStation {
     private static final Logger LOGGER = LogManager.getLogger(RefuellingStation.class);
+    private final AtomicInteger leftCarsCounter = new AtomicInteger(0);
     private final ReentrantLock[] pumps;
     private final int pumpsCount;
     private final int maxWaitTime;
@@ -52,6 +54,7 @@ public class RefuellingStation {
                     }
                     Thread.sleep(50);
                 }
+                leftCarsCounter.incrementAndGet();
                 return false;
             } else {
                 LOGGER.error("Invalid parameters");
@@ -61,6 +64,10 @@ public class RefuellingStation {
             LOGGER.error("Refueling problems");
             throw new RefuellingException(e);
         }
+    }
+
+    public int getLeftCarsCount() {
+        return leftCarsCounter.get();
     }
 
     public ReentrantLock[] getPumps() {
