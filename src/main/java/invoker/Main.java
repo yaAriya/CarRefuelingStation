@@ -30,8 +30,8 @@ public class Main {
         Car fourthCar = new Car(4, 45, refuellingStation);
         cars.add(fourthCar);
 
-        for (Car car : cars) {
-            car.start();
+        for (int i = 0; i < carsCount; i++) {
+            cars.get(i).start();
         }
 
         try {
