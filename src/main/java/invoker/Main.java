@@ -5,6 +5,7 @@ import entity.RefuellingStation;
 import loader.RefuellingParametersLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import util.StatisticsCollector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,8 @@ public class Main {
             throw new RuntimeException(e);
         }
 
-        LOGGER.info("{} out of {} cars left without refueling", refuellingStation.getLeftCarsCount(), carsCount);
+        StatisticsCollector statisticsCollector = new StatisticsCollector();
+        statisticsCollector.logStatistic(carsCount, refuellingStation.getLeftCarsCount(), refuellingStation.getTotalWaitingTimeCounter());
         LOGGER.info("Process end");
     }
 }

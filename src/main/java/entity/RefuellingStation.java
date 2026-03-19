@@ -8,11 +8,13 @@ import validator.Validator;
 import validator.ValidatorImpl;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class RefuellingStation {
     private static final Logger LOGGER = LogManager.getLogger(RefuellingStation.class);
     private final AtomicInteger leftCarsCounter = new AtomicInteger(0);
+    private final AtomicLong totalWaitingTimeCounter = new AtomicLong(0);
     private final ReentrantLock[] pumps;
     private final int pumpsCount;
     private final int maxWaitTime;
@@ -45,6 +47,8 @@ public class RefuellingStation {
                         if (pump.tryLock()) {
                             try {
                                 LOGGER.info("The {} car is refueling at {} pump", car.getId(), pump);
+                                totalWaitingTimeCounter.addAndGet(System.currentTimeMillis() - arrivalTime);
+                                LOGGER.info("Car {} waiting for {} mls", car.getId(), System.currentTimeMillis() - arrivalTime);
                                 Thread.sleep((long) car.getTankFreeSpace() * 10);
                                 return true;
                             } finally {
@@ -68,6 +72,10 @@ public class RefuellingStation {
 
     public int getLeftCarsCount() {
         return leftCarsCounter.get();
+    }
+
+    public long getTotalWaitingTimeCounter() {
+        return totalWaitingTimeCounter.get();
     }
 
     public ReentrantLock[] getPumps() {
